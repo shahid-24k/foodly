@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+
+body {
+  background: #FFFFFF;
+  color: #1E1B18;
+  font-family: 'IBM Plex Sans', sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+html.dark body {
+  background: #1C1A18;
+  color: #F7F3EC;
+}
+
+.font-display { font-family: 'Space Grotesk', sans-serif; }
+.eyebrow { font-family: 'Space Grotesk', sans-serif; letter-spacing: 0.1em; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { scrollbar-width: none; }
