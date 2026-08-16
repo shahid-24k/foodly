@@ -57,27 +57,21 @@ supabase/schema.sql          Full DB schema — reference copy of what's live in
 5. To promote a test account to restaurant/admin, there's no UI for it by
    design — it's a manual SQL update (documented in README.md).
 
-## Design system — "Tiffin Precision" (locked, do not change without asking)
-This direction was deliberately chosen over two other options (a maximalist
-"Market Stall" look and a structured "Banana Leaf Editorial" look) — don't
-drift back toward either.
+## Design system — "Soft Bubble / Modern Food Delivery"
+This is the current active design system, deliberately overriding the old "Tiffin Precision" look based on user reference.
 
-- **Palette** (Tailwind tokens in `tailwind.config.ts`): `mango` #E86A2E
-  (the one saturated accent — use it for every primary action/highlight),
-  `maroon` #C24A1D (hover/pressed state of the same accent — not a second
-  brand color), `leaf` #4C7A5A (veg indicator only), `cream`/white canvas,
-  `charcoal` #1E1B18 (text), `chip` #F7F3EC (neutral tag bg), `line` #E8E2D8
-  (hairline borders — used instead of soft drop shadows almost everywhere),
-  `ring` #F0DCC8 (the signature motif color).
-- **Typography**: Space Grotesk (`font-display` class, headings/UI chrome) +
-  IBM Plex Sans (body, default). Do not reintroduce Inter/Fraunces/Barlow
-  Condensed — those were the previous direction, deliberately replaced.
-- **Signature element**: concentric rings referencing a stacked steel tiffin
-  carrier (`RestaurantMark.tsx`, and the homepage hero). This is the one
-  "bold" moment in an otherwise restrained, hairline-border, minimal-shadow
-  UI — keep new UI quiet and let the rings stay the memorable bit.
-- Border radius is mostly sharp/minimal (`rounded-lg` at most on cards) — the
-  earlier `rounded-2xl`/`rounded-3xl` soft-bubble look was the old direction.
+- **Palette** (Tailwind tokens in `tailwind.config.ts`): 
+  - `primary`: `#6A38C2` (Purple/Indigo for accents and main buttons).
+  - `primary-dark`: `#4B2494` (Darker purple for hover states).
+  - `secondary`: `#42D2B8` (Teal/Cyan gradient end color).
+  - `accent`: `#FF5E7E` (Pinkish red for favorites/hearts).
+  - `surface`: `#FFFFFF` (White cards).
+  - `background`: `#F8F9FB` (Light grey/blue background).
+  - `text-main`: `#2D3748` (Dark grey for headings).
+  - `text-muted`: `#718096` (Lighter grey for descriptions).
+- **Typography**: Inter or similar modern geometric sans-serif for everything. Soft, friendly, legible.
+- **Signature element**: Floating elements, heavy drop shadows (`shadow-lg`, `shadow-xl`), gradients (purple to teal), and prominent central floating bottom navigation buttons.
+- **Border radius**: Heavy rounding (`rounded-2xl`, `rounded-3xl`, `rounded-full`) everywhere. No sharp corners.
 
 ## Restaurant images — deliberately NOT hotlinked photos everywhere
 Real photographed logos for these 8 small local businesses aren't reliably

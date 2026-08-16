@@ -5,6 +5,8 @@ import { ShoppingBag, MapPin, User, Receipt, Flame, Heart, Sun, Moon } from "luc
 import { createClient } from "@/lib/supabase/client";
 import { useCart } from "@/lib/cart-context";
 
+import FoodlyLogo from "@/components/FoodlyLogo";
+
 export default function Header() {
   const { count } = useCart();
   const [user, setUser] = useState<any>(null);
@@ -45,39 +47,36 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-cream/90 dark:bg-[#1C1A18]/95 backdrop-blur-md border-b border-line dark:border-[#332E28] transition-colors">
+    <header className="sticky top-0 z-30 bg-surface/90 dark:bg-[#1A202C]/95 backdrop-blur-md border-b border-gray-100 dark:border-[#2D3748] transition-colors">
       <div className="max-w-6xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between gap-4">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-mango to-[#C24A1D] flex items-center justify-center">
-            <Flame size={16} color="white" strokeWidth={2.5} />
-          </div>
-          <span className="font-display font-black tracking-tight text-charcoal dark:text-white text-xl">FOODLY</span>
+        <Link href="/" className="flex items-center hover:opacity-90 transition-opacity">
+          <FoodlyLogo size="md" />
         </Link>
 
-        <div className="hidden md:flex items-center gap-1 text-sm text-[#55504A] dark:text-[#A8A095]">
-          <MapPin size={16} className="text-mango" /> Krishnagiri
+        <div className="hidden md:flex items-center gap-1.5 text-sm text-text-muted dark:text-[#A8A095] font-medium">
+          <MapPin size={16} className="text-secondary" /> Krishnagiri
         </div>
 
         <div className="flex items-center gap-3">
-          {role === "restaurant" && <Link href="/restaurant/dashboard" className="text-sm font-bold text-charcoal dark:text-white hidden sm:block">Dashboard</Link>}
-          {role === "admin" && <Link href="/admin/dashboard" className="text-sm font-bold text-charcoal dark:text-white hidden sm:block">Admin</Link>}
-          <Link href="/favorites" className="hidden sm:block text-[#55504A] dark:text-[#A8A095] hover:text-charcoal dark:hover:text-white"><Heart size={20} /></Link>
-          <Link href="/orders" className="hidden sm:block text-[#55504A] dark:text-[#A8A095] hover:text-charcoal dark:hover:text-white"><Receipt size={20} /></Link>
-          <Link href={user ? "/account" : "/login"} className="hidden sm:block text-[#55504A] dark:text-[#A8A095] hover:text-charcoal dark:hover:text-white"><User size={20} /></Link>
+          {role === "restaurant" && <Link href="/restaurant/dashboard" className="text-sm font-bold text-text-muted dark:text-white hidden sm:block hover:text-primary transition-colors">Dashboard</Link>}
+          {role === "admin" && <Link href="/admin/dashboard" className="text-sm font-bold text-text-muted dark:text-white hidden sm:block hover:text-primary transition-colors">Admin</Link>}
+          <Link href="/favorites" className="hidden sm:block text-text-muted dark:text-[#A8A095] hover:text-accent dark:hover:text-white transition-colors"><Heart size={20} /></Link>
+          <Link href="/orders" className="hidden sm:block text-text-muted dark:text-[#A8A095] hover:text-primary dark:hover:text-white transition-colors"><Receipt size={20} /></Link>
+          <Link href={user ? "/account" : "/login"} className="hidden sm:block text-text-muted dark:text-[#A8A095] hover:text-primary dark:hover:text-white transition-colors"><User size={20} /></Link>
 
           {/* Theme Switcher Toggle */}
           <button
             onClick={toggleDarkMode}
-            className="p-2 rounded-full border border-line dark:border-[#332E28] text-charcoal dark:text-white hover:bg-chip dark:hover:bg-[#24201D] transition-colors"
+            className="p-2 rounded-full border border-gray-100 dark:border-[#2D3748] text-text-muted dark:text-white hover:bg-gray-50 dark:hover:bg-[#24201D] transition-colors"
             aria-label="Toggle Theme"
           >
-            {darkMode ? <Sun size={18} className="text-mango" /> : <Moon size={18} className="text-charcoal" />}
+            {darkMode ? <Sun size={18} className="text-secondary" /> : <Moon size={18} className="text-text-muted" />}
           </button>
 
-          <Link href="/cart" className="relative bg-charcoal dark:bg-white text-white dark:text-charcoal rounded-full p-2.5 hover:bg-[#1E1B18] transition-colors">
+          <Link href="/cart" className="relative bg-primary text-white rounded-full p-2.5 hover:bg-primary-dark transition-colors shadow-sm">
             <ShoppingBag size={18} />
             {count > 0 && (
-              <span className="absolute -top-1 -right-1 bg-mango text-[10px] font-bold text-white rounded-full w-5 h-5 flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-accent text-[10px] font-bold text-white rounded-full w-5 h-5 flex items-center justify-center">
                 {count}
               </span>
             )}

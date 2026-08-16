@@ -32,8 +32,8 @@ export default function FavoriteButton({ restaurantId }: { restaurantId: string 
   };
 
   return (
-    <button onClick={toggle} className="absolute top-3 right-3 bg-white border border-line rounded-full p-1.5 z-10" aria-label="Save to favorites">
-      <Heart size={14} className={saved ? "fill-mango text-mango" : "text-charcoal"} />
+    <button onClick={toggle} className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-2.5 shadow-sm hover:shadow-md transition-all z-10" aria-label="Save to favorites">
+      <Heart size={18} className={saved ? "fill-accent text-accent" : "text-text-muted"} />
     </button>
   );
 }

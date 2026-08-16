@@ -1,42 +1,62 @@
 import Link from "next/link";
-import { Clock, MapPin } from "lucide-react";
+import { Clock, MapPin, Star } from "lucide-react";
 import { Restaurant } from "@/lib/types";
 import RestaurantMark from "./RestaurantMark";
 import FavoriteButton from "./FavoriteButton";
 
 export default function RestaurantCard({ r }: { r: Restaurant }) {
+  // Clean locality to remove repetitive city suffixes
+  const cleanLocality = r.locality
+    ? r.locality.replace(/,\s*Krishnagiri/i, "").replace(/Krishnagiri\s*Locality/i, "Central Town").replace(/Krishnagiri\s*Town/i, "Town Center")
+    : "Nearby";
+
   return (
     <Link
       href={`/restaurants/${r.id}`}
-      className="group text-left w-64 md:w-72 flex-shrink-0 rounded-lg overflow-hidden bg-white dark:bg-[#24201D] border border-line dark:border-[#332E28] hover:border-mango transition-all duration-200 relative block shadow-xs hover:shadow-md"
+      className="group text-left w-72 sm:w-80 flex-shrink-0 rounded-[2rem] overflow-hidden bg-surface dark:bg-[#24201D] border border-gray-100/80 dark:border-[#332E28] hover:border-primary/30 transition-all duration-300 relative flex flex-col shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_16px_36px_rgb(0,0,0,0.12)] hover:-translate-y-1"
     >
-      <div className="relative h-36 md:h-40 border-b border-line dark:border-[#332E28]">
+      {/* Top Image Section */}
+      <div className="relative h-48 w-full overflow-hidden bg-gray-100 dark:bg-[#1A202C]">
         <RestaurantMark r={r} size="small" />
         <FavoriteButton restaurantId={r.id} />
         {r.offer && (
-          <span className="absolute top-3 left-3 bg-white dark:bg-[#1C1A18] border border-line dark:border-[#332E28] eyebrow text-[10px] font-bold px-2 py-1 text-mango uppercase shadow-xs">
+          <div className="absolute top-4 left-4 bg-white/95 dark:bg-[#1A202C]/90 backdrop-blur-md text-primary text-[11px] font-extrabold px-3 py-1.5 rounded-full shadow-md">
             {r.offer}
-          </span>
+          </div>
         )}
       </div>
-      <div className="p-4">
-        <div className="flex items-start justify-between gap-2">
-          <h3 className="font-display font-bold text-charcoal dark:text-white text-sm leading-tight group-hover:text-mango transition-colors">
-            {r.name}
-          </h3>
-          <div className="flex-shrink-0 w-8 h-8 rounded-full border-2 border-mango bg-mango/10 flex items-center justify-center">
-            <span className="text-[10px] font-black text-mango">{r.rating}</span>
+
+      {/* Card Info Body */}
+      <div className="p-5 flex-1 flex flex-col justify-between">
+        <div>
+          <div className="flex items-center justify-between gap-2 mb-1.5">
+            <h3 className="font-bold text-text-main dark:text-white text-base leading-snug group-hover:text-primary transition-colors line-clamp-1">
+              {r.name}
+            </h3>
+            <div className="flex-shrink-0 flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded-full">
+              <Star size={12} className="fill-emerald-600 text-emerald-600 dark:fill-emerald-400 dark:text-emerald-400" />
+              <span className="text-xs font-black">{r.rating}</span>
+            </div>
+          </div>
+
+          <p className="text-xs font-medium text-text-muted dark:text-[#8C8477] line-clamp-1 mb-2">
+            {r.cuisine}
+          </p>
+
+          <div className="flex items-center gap-1.5 text-xs text-text-muted dark:text-[#8C8477]">
+            <MapPin size={13} className="text-secondary flex-shrink-0" />
+            <span className="truncate">{cleanLocality}</span>
           </div>
         </div>
-        <p className="text-xs text-[#9A9488] dark:text-[#8C8477] mt-1 line-clamp-1">{r.cuisine}</p>
-        <div className="flex items-center gap-1 mt-2 eyebrow text-[10px] font-semibold text-[#9A9488] dark:text-[#8C8477] uppercase">
-          <MapPin size={11} className="text-mango" /> {r.locality}
-        </div>
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-line dark:border-[#332E28]">
-          <span className="flex items-center gap-1 text-xs font-medium text-[#9A9488] dark:text-[#8C8477]">
-            <Clock size={12} className="text-mango" /> {r.delivery_time} min
+
+        <div className="flex items-center justify-between mt-4 pt-3.5 border-t border-gray-100 dark:border-[#332E28]/60">
+          <div className="flex items-center gap-1.5 text-xs font-semibold text-text-main dark:text-gray-200">
+            <Clock size={14} className="text-secondary" />
+            <span>{r.delivery_time} mins</span>
+          </div>
+          <span className="text-xs font-bold text-primary dark:text-secondary bg-primary/10 dark:bg-primary/20 px-2.5 py-1 rounded-full">
+            {r.price_range === "₹" ? "Budget friendly" : r.price_range === "₹₹₹" ? "Premium" : "Popular price"}
           </span>
-          <span className="text-xs font-bold text-charcoal dark:text-white">{r.price_range}</span>
         </div>
       </div>
     </Link>

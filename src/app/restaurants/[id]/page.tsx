@@ -67,54 +67,57 @@ export default function RestaurantDetailPage() {
 
   return (
     <main className="pb-28">
-      <div className="h-48 md:h-64 relative">
+      <div className="h-64 md:h-80 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
         <RestaurantMark r={restaurant} size="large" />
-        <button onClick={() => router.back()} className="absolute top-4 left-4 bg-white/90 dark:bg-black/80 rounded-full p-2 backdrop-blur text-charcoal dark:text-white">
-          <ArrowLeft size={18} />
+        <button onClick={() => router.back()} className="absolute top-6 left-4 bg-white/20 hover:bg-white/40 border border-white/20 backdrop-blur-md rounded-full p-2.5 text-white transition-all shadow-lg z-20">
+          <ArrowLeft size={20} />
         </button>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 md:px-8 -mt-6 relative">
-        <div className="bg-white dark:bg-[#24201D] rounded-2xl shadow-lg border border-line dark:border-[#332E28] p-5">
-          <h1 className="font-display font-black text-2xl text-charcoal dark:text-white">{restaurant.name}</h1>
-          <p className="text-sm text-[#9A9488] dark:text-[#8C8477] mt-1">{restaurant.cuisine} &middot; {restaurant.price_range} &middot; {restaurant.locality}</p>
-          <div className="flex flex-wrap items-center gap-4 mt-3 text-sm font-semibold">
-            <span className="flex items-center gap-1 text-leaf"><Star size={14} className="fill-leaf" /> {restaurant.rating}</span>
-            <span className="flex items-center gap-1 text-[#55504A] dark:text-[#A8A095]"><Clock size={14} /> {restaurant.delivery_time} min</span>
-            {restaurant.offer && <span className="bg-[#FBEADD] dark:bg-maroon/20 text-maroon dark:text-mango text-xs font-bold px-2.5 py-1 rounded-full">{restaurant.offer}</span>}
+      <div className="max-w-4xl mx-auto px-4 md:px-8 -mt-12 relative z-20">
+        <div className="bg-surface dark:bg-[#24201D] rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-transparent p-6 md:p-8">
+          <h1 className="font-black text-2xl md:text-3xl text-text-main dark:text-white">{restaurant.name}</h1>
+          <p className="text-sm text-text-muted dark:text-[#8C8477] mt-2">
+            {restaurant.cuisine} &middot; {restaurant.price_range} &middot; {restaurant.locality.replace(/,\s*Krishnagiri/i, "").replace(/Krishnagiri\s*Locality/i, "Town Center")}
+          </p>
+          <div className="flex flex-wrap items-center gap-4 mt-4 text-sm font-semibold">
+            <span className="flex items-center gap-1 text-primary bg-primary/10 px-3 py-1 rounded-full"><Star size={14} className="fill-primary" /> {restaurant.rating}</span>
+            <span className="flex items-center gap-1 text-text-muted dark:text-[#A8A095]"><Clock size={14} /> {restaurant.delivery_time} min</span>
+            {restaurant.offer && <span className="bg-gradient-to-r from-primary to-secondary text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">{restaurant.offer}</span>}
           </div>
         </div>
       </div>
 
       {/* Menu Search and Sticky Category Bar */}
       <div className="max-w-4xl mx-auto px-4 md:px-8 mt-6">
-        <div className="flex flex-col sm:flex-row gap-3 mb-5">
-          <div className="flex-1 flex items-center gap-2 border border-line dark:border-[#332E28] rounded-xl px-3 py-2.5 bg-white dark:bg-[#24201D]">
-            <Search size={15} className="text-[#9A9488]" />
+        <div className="flex flex-col sm:flex-row gap-3 mb-6">
+          <div className="flex-1 flex items-center gap-2 rounded-[2rem] px-4 py-3 bg-white dark:bg-[#24201D] shadow-sm border border-gray-100 dark:border-[#332E28] focus-within:border-primary/30 transition-colors">
+            <Search size={18} className="text-text-muted" />
             <input
               value={dishQuery}
               onChange={(e) => setDishQuery(e.target.value)}
               placeholder={`Search dishes in ${restaurant.name}`}
-              className="w-full text-sm outline-none bg-transparent text-charcoal dark:text-white placeholder-[#9A9488]"
+              className="w-full text-sm outline-none bg-transparent text-text-main dark:text-white placeholder-text-muted"
             />
           </div>
           <button
             onClick={() => setVegOnly((v) => !v)}
-            className={`px-3 py-2.5 rounded-xl text-xs font-bold border flex items-center justify-center gap-1.5 transition-colors ${
-              vegOnly ? "bg-leaf text-white border-leaf" : "bg-white dark:bg-[#24201D] border-line dark:border-[#332E28] text-[#55504A] dark:text-white"
+            className={`px-5 py-3 rounded-[2rem] text-sm font-bold border flex items-center justify-center gap-2 transition-all shadow-sm ${
+              vegOnly ? "bg-secondary text-white border-secondary" : "bg-white dark:bg-[#24201D] border-gray-100 dark:border-[#332E28] text-text-muted dark:text-white hover:border-secondary/30"
             }`}
           >
-            <Leaf size={14} /> Veg only
+            <Leaf size={16} /> Veg only
           </button>
         </div>
 
         {/* Sticky Category Tabs */}
         {categories.length > 0 && (
-          <div className="sticky top-16 z-20 bg-cream/95 dark:bg-[#1C1A18]/95 backdrop-blur py-2 border-b border-line dark:border-[#332E28] -mx-4 px-4 md:-mx-8 md:px-8 flex gap-2 overflow-x-auto scrollbar-hide mb-6">
+          <div className="sticky top-16 z-20 bg-background/95 dark:bg-[#1A202C]/95 backdrop-blur-md py-3 -mx-4 px-4 md:-mx-8 md:px-8 flex gap-3 overflow-x-auto scrollbar-hide mb-8 shadow-sm">
             <button
               onClick={() => setActiveCategory(null)}
-              className={`px-3 py-1.5 rounded-full text-xs font-bold border flex-shrink-0 transition-colors ${
-                !activeCategory ? "bg-charcoal dark:bg-white text-white dark:text-charcoal border-charcoal dark:border-white" : "border-line dark:border-[#332E28] text-[#55504A] dark:text-[#A8A095]"
+              className={`px-4 py-2 rounded-full text-sm font-bold flex-shrink-0 transition-all ${
+                !activeCategory ? "bg-primary text-white shadow-md shadow-primary/30" : "bg-white dark:bg-[#24201D] text-text-muted border border-gray-100 dark:border-[#332E28] hover:border-primary/30"
               }`}
             >
               All Items ({menu.length})
@@ -123,8 +126,8 @@ export default function RestaurantDetailPage() {
               <button
                 key={cat}
                 onClick={() => scrollToCategory(cat)}
-                className={`px-3 py-1.5 rounded-full text-xs font-bold border flex-shrink-0 transition-colors ${
-                  activeCategory === cat ? "bg-mango text-white border-mango" : "border-line dark:border-[#332E28] text-[#55504A] dark:text-[#A8A095] bg-white dark:bg-[#24201D]"
+                className={`px-4 py-2 rounded-full text-sm font-bold flex-shrink-0 transition-all ${
+                  activeCategory === cat ? "bg-primary text-white shadow-md shadow-primary/30" : "bg-white dark:bg-[#24201D] text-text-muted border border-gray-100 dark:border-[#332E28] hover:border-primary/30"
                 }`}
               >
                 {cat} ({menu.filter(m => m.category === cat).length})
@@ -143,34 +146,34 @@ export default function RestaurantDetailPage() {
               if (itemsInCat.length === 0) return null;
               return (
                 <div key={cat} id={`cat-${cat}`} className="mb-8 scroll-mt-28">
-                  <h3 className="font-bold text-lg text-charcoal dark:text-white mb-3">{cat}</h3>
-                  <div className="divide-y divide-line dark:divide-[#332E28]">
+                  <h3 className="font-bold text-xl text-text-main dark:text-white mb-4">{cat}</h3>
+                  <div className="grid gap-4">
                     {itemsInCat.map((item) => {
                       const inCart = cart.items[item.id];
                       return (
-                        <div key={item.id} className="flex items-center justify-between gap-4 py-4">
-                          <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 shadow-sm">
+                        <div key={item.id} className="flex items-center justify-between gap-4 py-4 px-4 bg-white dark:bg-[#24201D] rounded-2xl shadow-sm border border-gray-50 dark:border-transparent hover:shadow-md transition-shadow">
+                          <div className="w-24 h-24 rounded-[1.5rem] overflow-hidden flex-shrink-0 shadow-sm border border-gray-100 dark:border-transparent">
                             <FoodImage src={item.image_url} id={item.id} alt={item.name} className="w-full h-full" />
                           </div>
                           <div className="flex-1">
-                            <div className="flex items-center gap-2">
-                              <span className={`w-4 h-4 border-2 rounded-sm flex items-center justify-center flex-shrink-0 ${item.is_veg ? "border-leaf" : "border-maroon"}`}>
-                                <span className={`w-1.5 h-1.5 rounded-full ${item.is_veg ? "bg-leaf" : "bg-maroon"}`} />
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className={`w-4 h-4 border-2 rounded-sm flex items-center justify-center flex-shrink-0 ${item.is_veg ? "border-secondary" : "border-accent"}`}>
+                                <span className={`w-1.5 h-1.5 rounded-full ${item.is_veg ? "bg-secondary" : "bg-accent"}`} />
                               </span>
-                              <h4 className="font-bold text-sm text-charcoal dark:text-white">{item.name}</h4>
+                              <h4 className="font-bold text-base text-text-main dark:text-white">{item.name}</h4>
                             </div>
-                            <p className="text-xs text-[#9A9488] dark:text-[#8C8477] mt-1 max-w-sm">{item.description}</p>
-                            <p className="text-sm font-bold text-charcoal dark:text-white mt-1.5">{money(item.price)}</p>
+                            <p className="text-xs text-text-muted dark:text-[#8C8477] mb-2 max-w-sm line-clamp-2">{item.description}</p>
+                            <p className="text-base font-bold text-primary dark:text-white">{money(item.price)}</p>
                           </div>
-                          <div className="w-24 flex-shrink-0 flex justify-end self-end">
+                          <div className="w-28 flex-shrink-0 flex justify-end self-center">
                             {inCart ? (
-                              <div className="flex items-center gap-3 bg-mango text-white rounded-xl px-2 py-1.5 shadow">
-                                <button onClick={() => changeQty(item.id, -1)}><Minus size={14} /></button>
-                                <span className="text-sm font-bold w-3 text-center">{inCart.qty}</span>
-                                <button onClick={() => changeQty(item.id, 1)}><Plus size={14} /></button>
+                              <div className="flex items-center gap-3 bg-primary text-white rounded-full px-3 py-2 shadow-md">
+                                <button onClick={() => changeQty(item.id, -1)} className="hover:scale-110 transition-transform"><Minus size={16} /></button>
+                                <span className="text-sm font-bold w-4 text-center">{inCart.qty}</span>
+                                <button onClick={() => changeQty(item.id, 1)} className="hover:scale-110 transition-transform"><Plus size={16} /></button>
                               </div>
                             ) : (
-                              <button onClick={() => handleAdd(item)} className="border-2 border-mango text-mango font-bold text-xs px-4 py-2 rounded-xl hover:bg-mango hover:text-white transition-colors">+ Add</button>
+                              <button onClick={() => handleAdd(item)} className="bg-primary/10 text-primary hover:bg-primary hover:text-white font-bold text-sm px-5 py-2.5 rounded-full transition-all shadow-sm">+ Add</button>
                             )}
                           </div>
                         </div>
@@ -184,7 +187,8 @@ export default function RestaurantDetailPage() {
       </div>
 
       {Object.keys(cart.items).length > 0 && (
-        <Link href="/cart" className="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-30 bg-gradient-to-r from-mango to-[#C24A1D] text-white font-bold px-6 py-3.5 rounded-full shadow-xl">
+        <Link href="/cart" className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-30 bg-gradient-to-r from-primary to-secondary text-white font-bold px-8 py-4 rounded-full shadow-[0_8px_30px_rgb(106,56,194,0.4)] hover:scale-105 transition-transform flex items-center gap-3">
+          <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">{(Object.values(cart.items).reduce((sum, item) => sum + item.qty, 0))}</span>
           View basket &rarr;
         </Link>
       )}

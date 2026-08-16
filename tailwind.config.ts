@@ -6,18 +6,18 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        mango: "#E86A2E",   // single saturated accent — sambar-orange
-        maroon: "#C24A1D",  // pressed/hover state of the same accent, not a second brand color
-        leaf: "#4C7A5A",    // muted veg indicator
-        cream: "#FFFFFF",   // pure white canvas
-        charcoal: "#1E1B18",
-        chip: "#F7F3EC",
-        line: "#E8E2D8",
-        ring: "#F0DCC8",    // the tiffin-stack ring motif color
+        primary: "#6A38C2",
+        "primary-dark": "#4B2494",
+        secondary: "#42D2B8",
+        accent: "#FF5E7E",
+        surface: "#FFFFFF",
+        background: "#F8F9FB",
+        "text-main": "#2D3748",
+        "text-muted": "#718096",
       },
       fontFamily: {
-        display: ["'Space Grotesk'", "sans-serif"],
-        body: ["'IBM Plex Sans'", "sans-serif"],
+        display: ["'Inter'", "sans-serif"],
+        body: ["'Inter'", "sans-serif"],
       },
     },
   },
