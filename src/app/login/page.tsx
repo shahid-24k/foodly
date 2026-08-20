@@ -1,54 +1,68 @@
 "use client";
-import { useState } from "react";
+
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { Suspense } from "react";
+import { SignIn2 } from "@/components/ui/clean-minimal-sign-in";
 
 function LoginForm() {
   const router = useRouter();
   const params = useSearchParams();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLogin = async (email: string, password: string) => {
     setLoading(true);
     setError(null);
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error: authError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
     setLoading(false);
-    if (error) { setError(error.message); return; }
+
+    if (authError) {
+      const msg = authError.message.toLowerCase();
+      if (
+        msg.includes("invalid login credentials") ||
+        msg.includes("invalid_credentials")
+      ) {
+        setError("Invalid email or password. Please try again.");
+      } else if (msg.includes("email not confirmed")) {
+        setError(
+          "Your email hasn't been confirmed yet. Check your inbox for a confirmation link."
+        );
+      } else {
+        setError(authError.message);
+      }
+      return;
+    }
+
     router.push(params.get("next") || "/");
     router.refresh();
   };
 
   return (
-    <main className="max-w-sm mx-auto px-4 py-16">
-      <h1 className="font-display font-black text-2xl text-charcoal mb-1">Welcome back</h1>
-      <p className="text-sm text-[#9A9488] mb-6">Log in to order and track deliveries.</p>
-      <form onSubmit={handleLogin} className="space-y-3">
-        <input type="email" required placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}
-          className="w-full text-sm border border-line rounded-lg px-3 py-2.5 outline-none focus:border-mango" />
-        <input type="password" required placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}
-          className="w-full text-sm border border-line rounded-lg px-3 py-2.5 outline-none focus:border-mango" />
-        {error && <p className="text-xs text-maroon">{error}</p>}
-        <button disabled={loading} className="w-full bg-mango disabled:opacity-60 text-white font-bold py-3 rounded-2xl">
-          {loading ? "Logging in…" : "Log in"}
-        </button>
-      </form>
-      <p className="text-xs text-[#9A9488] mt-5 text-center">
-        No account? <Link href="/signup" className="font-bold text-mango">Sign up</Link>
-      </p>
-    </main>
+    <SignIn2
+      onSignIn={handleLogin}
+      loading={loading}
+      errorMessage={error}
+      title="Welcome back"
+      subtitle="Sign in to your FOODLY account to order and track deliveries."
+      signupUrl="/signup"
+    />
   );
 }
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="max-w-sm mx-auto px-4 py-16 text-center text-[#9A9488]">Loading…</div>}>
+    <Suspense
+      fallback={
+        <div className="max-w-sm mx-auto px-4 py-16 text-center text-text-muted">
+          Loading…
+        </div>
+      }
+    >
       <LoginForm />
     </Suspense>
   );

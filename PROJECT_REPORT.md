@@ -1,48 +1,58 @@
 # FOODLY — Project Report
 
 ## 1. Introduction
-FOODLY is a food delivery web application built for real restaurants operating in Krishnagiri, Tamil Nadu. It was developed as a college project under the Naan Mudhalvan initiative to demonstrate full-stack web development skills: frontend UI/UX, backend data modeling, authentication, and role-based access control.
+
+FOODLY is a food delivery web app for real restaurants in Krishnagiri, Tamil Nadu. Built as a college project under the Naan Mudhalvan initiative — the idea was to cover the full stack: frontend UI, backend data, authentication, and role-based access, all working together as a real deployable product.
 
 ## 2. Objective
-To build a working, deployable food ordering platform covering the complete customer journey (discover → order → track) alongside operational dashboards for restaurant owners and platform administrators, backed by a real relational database.
 
-## 3. Tech stack
+Build a working food ordering platform that covers the whole customer flow (discover restaurants → order food → track delivery) plus dashboards for restaurant owners and a platform admin, all backed by a real relational database with proper access control.
+
+## 3. Tech Stack
+
 | Layer | Technology |
 |---|---|
-| Frontend framework | Next.js 14 (App Router), React 18, TypeScript |
+| Frontend | Next.js 14 (App Router), React 18, TypeScript |
 | Styling | Tailwind CSS |
-| Backend / Database | Supabase (managed PostgreSQL) |
-| Authentication | Supabase Auth (email/password) with Row Level Security |
+| Backend / DB | Supabase (managed PostgreSQL) |
+| Auth | Supabase Auth (email/password) with Row Level Security |
 | Icons | lucide-react |
 
-## 4. System design
+## 4. How It's Built
 
-### 4.1 Database schema
-- **restaurants** — name, cuisine, locality, rating, delivery time, price range, branding gradient, hero image
-- **menu_items** — linked to a restaurant, name, description, price, veg/non-veg flag, category, image
-- **orders** — items (JSON), pricing breakdown, delivery address (JSON), payment method, status index, timestamps
+### 4.1 Database
+
+Five main tables:
+- **restaurants** — name, cuisine, locality, rating, delivery time, price range, branding colors, hero image
+- **menu_items** — linked to a restaurant; name, description, price, veg/non-veg, category, image
+- **orders** — items as JSON, pricing, delivery address as JSON, payment method, status index, timestamps
 - **addresses** — saved customer delivery addresses
-- **profiles** — linked 1:1 to Supabase `auth.users`, stores `role` (customer/restaurant/admin) and, for restaurant owners, the `restaurant_id` they manage
+- **profiles** — one per Supabase auth user; stores role (customer / restaurant / admin) and optionally which restaurant they manage
 
-### 4.2 Authentication & authorization
-Sign-up creates a Supabase Auth user; a Postgres trigger (`handle_new_user`) automatically creates a matching `profiles` row with the selected role. Next.js middleware checks the authenticated user's role (via a server-side Supabase client reading cookies) before allowing access to `/checkout`, `/account`, `/orders`, `/restaurant/dashboard`, and `/admin/dashboard` — unauthenticated or wrong-role requests are redirected.
+### 4.2 Auth & Access Control
 
-Row Level Security (RLS) policies enforce the same rules at the database layer, independent of the frontend: restaurant owners can only update orders belonging to their own restaurant; anyone can read the public menu/restaurant catalog; only the order's owner or an admin can act on it.
+When someone signs up, Supabase Auth creates the user and a Postgres trigger (`handle_new_user`) creates a matching row in `profiles` with their chosen role. The Next.js middleware checks the user's role via a server-side Supabase client (reading cookies) before allowing access to protected routes like `/checkout`, `/orders`, `/restaurant/dashboard`, and `/admin/dashboard`. Wrong role or not logged in → redirect to `/login`.
 
-### 4.3 Core user flows
-1. **Customer**: browse restaurants → view menu → add to cart (persisted in `localStorage`) → checkout (address → payment → confirm) → order written to `orders` table → live status tracking page (polls and advances the order's `status_index`) → order history with one-click reorder.
-2. **Restaurant owner**: dashboard showing revenue/order stats for their linked restaurant, and a live list of incoming orders they can advance through the fulfillment pipeline.
-3. **Admin**: platform-wide stats (users, restaurants, orders, revenue) and a directory of all restaurants.
+On top of that, Postgres Row Level Security policies enforce the same rules at the database layer — so even if someone bypasses the frontend, the DB won't let them do anything they shouldn't. Restaurant owners can only manage their own restaurant's orders and menu. A `prevent_privilege_escalation` trigger stops anyone from changing their own role or restaurant_id through the client API.
 
-## 5. Data used
-Eight real Krishnagiri restaurants were sourced via Google Places (name, cuisine, real customer rating, locality, and a real photo with attribution): Hotel Sri Rajeshwari, Annapoorna Classic, Srirangam Cafe, Salem RR Biryani, Feast Pizza, Meat And Eat, Anu Krishna Sweets and Bakery, and Belgium Bliss.
+### 4.3 User Flows
 
-## 6. Limitations and future work
-- Payment is simulated (no real payment gateway integration).
-- Order status progression is time-simulated rather than driven by real kitchen/delivery events.
-- Restaurant photography is a placeholder mix (Google Places photos + generated brand marks) pending the restaurant owner uploading official photos.
-- No push notifications; status updates are pull-based (polling).
-- Future work: real payment gateway (Razorpay/Stripe), delivery partner tracking via geolocation, ratings/reviews submission, coupon system.
+1. **Customer**: browse restaurants → look at a menu → add to cart (stored in localStorage) → checkout (address + payment → confirm) → order saved to DB → status tracking page (polls for updates) → order history with reorder
+2. **Restaurant owner**: dashboard with order stats, live incoming orders they can advance through the pipeline, and full menu management (add/edit/delete items)
+3. **Admin**: platform-wide stats (total users, restaurants, orders, revenue) and a list of all restaurants
+
+## 5. Data Sources
+
+The 8 restaurants are real places in Krishnagiri, sourced via Google Places — names, cuisines, ratings, localities, and photos (with attribution where required): Hotel Sri Rajeshwari, Annapoorna Classic, Srirangam Cafe, Salem RR Biryani, Feast Pizza, Meat And Eat, Anu Krishna Sweets and Bakery, and Belgium Bliss. Some ratings were cross-checked against Swiggy listings.
+
+## 6. Limitations & Future Work
+
+- Payment is simulated — three options shown but no real gateway. Razorpay is the plan when it's time.
+- Order status auto-advances on a timer for demo purposes. In a real version this would be driven by the restaurant/delivery side.
+- Photos are a mix of Google Places images and generated brand marks. Real restaurant photos can be uploaded anytime.
+- No push notifications — status updates are poll-based.
+- Future: real payment (Razorpay), delivery tracking with geolocation, customer ratings/reviews, coupon system.
 
 ## 7. Conclusion
-FOODLY demonstrates a complete, working full-stack implementation of a food delivery platform — real authentication and role-based access, a normalized relational schema enforced with Row Level Security, and a responsive UI covering both the customer and operator sides of the product.
+
+FOODLY covers the core of a food delivery platform end-to-end — real auth with role-based access, a normalized database with Row Level Security, and a responsive UI for both customers and operators. It's a working demo, not a mockup, and the code is structured to be extended with real payment and real-time features later.

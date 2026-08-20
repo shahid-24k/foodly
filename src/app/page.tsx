@@ -3,6 +3,16 @@ import { createClient } from "@/lib/supabase/server";
 import RestaurantCarousel from "@/components/RestaurantCarousel";
 import { Restaurant } from "@/lib/types";
 import { LOCAL_RESTAURANTS } from "@/lib/data";
+import FoodFunFact from "@/components/FoodFunFact";
+import {
+  HeroReveal,
+  HeroImageReveal,
+  SectionReveal,
+  CategoryStagger,
+  CategoryItem,
+  MoodStagger,
+  MoodItem,
+} from "@/components/HomeAnimations";
 
 const CUISINES = [
   { id: "biryani", name: "Biryani", image: "/menu/chicken-biryani-0.jpg" },
@@ -51,7 +61,7 @@ export default async function HomePage() {
       {/* Soft Bubble Hero Banner */}
       <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-secondary/10 px-4 md:px-8 pt-8 pb-14 md:pt-14 md:pb-18 transition-colors">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 items-center relative z-10">
-          <div>
+          <HeroReveal>
             <div className="inline-flex items-center gap-2 mb-4 text-primary font-semibold text-xs md:text-sm bg-white/70 dark:bg-white/10 px-4 py-1.5 rounded-full shadow-sm backdrop-blur-md">
               <span className="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
               Delivering near you &bull; 20-30 min
@@ -80,112 +90,127 @@ export default async function HomePage() {
                 Search
               </button>
             </form>
-          </div>
+          </HeroReveal>
 
-          <div className="relative h-64 md:h-88 flex items-center justify-center">
-            {/* Soft Bubble Background Accent */}
-            <div className="absolute w-[110%] h-[110%] bg-gradient-to-tr from-primary/20 to-secondary/20 blur-3xl rounded-full mix-blend-multiply opacity-70 pointer-events-none"></div>
-            
-            <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-[3rem] overflow-hidden shadow-2xl rotate-2 border-4 border-white/80 dark:border-[#332E28] transition-transform duration-500 hover:rotate-0">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/restaurants/r12.jpg" alt="Featured Food" className="w-full h-full object-cover scale-105" />
-            </div>
-            
-            <div className="absolute -bottom-3 -left-2 md:-left-4 bg-surface dark:bg-[#24201D] p-3.5 md:p-4 rounded-2xl shadow-[0_12px_36px_rgb(0,0,0,0.12)] border border-gray-100 dark:border-[#332E28] flex items-center gap-3 animate-bounce" style={{ animationDuration: '3.5s' }}>
-              <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <HeroImageReveal>
+            <div className="relative h-64 md:h-88 flex items-center justify-center">
+              {/* Soft Bubble Background Accent */}
+              <div className="absolute w-[110%] h-[110%] bg-gradient-to-tr from-primary/20 to-secondary/20 blur-3xl rounded-full mix-blend-multiply opacity-70 pointer-events-none"></div>
+              
+              <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-[3rem] overflow-hidden shadow-2xl rotate-2 border-4 border-white/80 dark:border-[#332E28] transition-transform duration-500 hover:rotate-0">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/restaurants/r12.jpg" alt="Featured Food" className="w-full h-full object-cover scale-105" />
               </div>
-              <div>
-                <span className="font-bold text-text-main dark:text-white block text-sm">24 min</span>
-                <span className="text-[11px] text-text-muted font-medium">Fast live delivery</span>
+              
+              <div className="absolute -bottom-3 -left-2 md:-left-4 bg-surface dark:bg-[#24201D] p-3.5 md:p-4 rounded-2xl shadow-[0_12px_36px_rgb(0,0,0,0.12)] border border-gray-100 dark:border-[#332E28] flex items-center gap-3 animate-bounce" style={{ animationDuration: '3.5s' }}>
+                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </div>
+                <div>
+                  <span className="font-bold text-text-main dark:text-white block text-sm">24 min</span>
+                  <span className="text-[11px] text-text-muted font-medium">Fast live delivery</span>
+                </div>
               </div>
             </div>
-          </div>
+          </HeroImageReveal>
         </div>
       </section>
 
       {/* Categories Section with Real Food Photos */}
       <div className="max-w-6xl mx-auto mt-12 px-4 md:px-8">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="font-bold text-xl md:text-2xl text-text-main dark:text-white tracking-tight">
-            Explore Categories
-          </h2>
-          <Link href="/restaurants" className="text-xs md:text-sm font-semibold text-primary hover:underline">
-            View all &rarr;
-          </Link>
-        </div>
-
-        <div className="flex gap-4 md:gap-5 overflow-x-auto pb-4 pt-1 scrollbar-hide px-1 -mx-1 flex-nowrap">
-          {CUISINES.map((c) => (
-            <Link
-              key={c.id}
-              href={`/restaurants?cuisine=${c.id}`}
-              className="flex-shrink-0 flex flex-col items-center gap-2.5 group text-center"
-            >
-              <div className="w-20 h-20 md:w-24 md:h-24 rounded-[2rem] bg-surface dark:bg-[#24201D] shadow-[0_4px_20px_rgb(0,0,0,0.06)] group-hover:shadow-[0_8px_30px_rgb(106,56,194,0.18)] flex items-center justify-center border border-transparent group-hover:border-primary/30 transition-all duration-300 overflow-hidden relative p-1">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={c.image}
-                  alt={c.name}
-                  className="w-full h-full object-cover rounded-[1.75rem] group-hover:scale-110 transition-transform duration-500"
-                />
-              </div>
-              <span className="text-xs font-bold text-text-muted group-hover:text-primary transition-colors max-w-[5rem] truncate">
-                {c.name}
-              </span>
+        <SectionReveal>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="font-bold text-xl md:text-2xl text-text-main dark:text-white tracking-tight">
+              Explore Categories
+            </h2>
+            <Link href="/restaurants" className="text-xs md:text-sm font-semibold text-primary hover:underline">
+              View all &rarr;
             </Link>
+          </div>
+        </SectionReveal>
+
+        <CategoryStagger>
+          {CUISINES.map((c) => (
+            <CategoryItem key={c.id}>
+              <Link
+                href={`/restaurants?cuisine=${c.id}`}
+                className="flex-shrink-0 flex flex-col items-center gap-2.5 group text-center"
+              >
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-[2rem] bg-surface dark:bg-[#24201D] shadow-[0_4px_20px_rgb(0,0,0,0.06)] group-hover:shadow-[0_8px_30px_rgb(106,56,194,0.18)] flex items-center justify-center border border-transparent group-hover:border-primary/30 transition-all duration-300 overflow-hidden relative p-1">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={c.image}
+                    alt={c.name}
+                    className="w-full h-full object-cover rounded-[1.75rem] group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
+                <span className="text-xs font-bold text-text-muted group-hover:text-primary transition-colors max-w-[5rem] truncate">
+                  {c.name}
+                </span>
+              </Link>
+            </CategoryItem>
           ))}
-        </div>
+        </CategoryStagger>
       </div>
 
       {/* Restaurant Carousel 1: Popular / Top Rated */}
       <div className="max-w-6xl mx-auto mt-12 px-4 md:px-8">
-        <RestaurantCarousel
-          title="Popular Restaurants"
-          subtitle="Top rated spots near you"
-          items={byRating}
-        />
+        <SectionReveal>
+          <RestaurantCarousel
+            title="Popular Restaurants"
+            subtitle="Top rated spots near you"
+            items={byRating}
+          />
+        </SectionReveal>
       </div>
 
       {/* Modern Mood Selector Card */}
       <div className="max-w-6xl mx-auto mt-6 mb-12 px-4 md:px-8">
-        <div className="rounded-[2.5rem] bg-gradient-to-r from-primary to-primary-dark p-7 md:p-10 shadow-xl relative overflow-hidden text-white">
-          <div className="absolute top-0 right-0 w-72 h-72 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
-          
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-7 relative z-10">
-            <div>
-              <span className="inline-block bg-white/20 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full mb-2">
-                Smart Suggestions
-              </span>
-              <h2 className="text-2xl md:text-3xl font-black">What's your mood?</h2>
+        <SectionReveal>
+          <div className="rounded-[2.5rem] bg-gradient-to-r from-primary to-primary-dark p-7 md:p-10 shadow-xl relative overflow-hidden text-white">
+            <div className="absolute top-0 right-0 w-72 h-72 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
+            
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-7 relative z-10">
+              <div>
+                <span className="inline-block bg-white/20 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full mb-2">
+                  Smart Suggestions
+                </span>
+                <h2 className="text-2xl md:text-3xl font-black">What&apos;s your mood?</h2>
+              </div>
+              <p className="text-white/80 text-xs md:text-sm max-w-sm">
+                Tap any dining mood to instantly filter the best menu picks.
+              </p>
             </div>
-            <p className="text-white/80 text-xs md:text-sm max-w-sm">
-              Tap any dining mood to instantly filter the best menu picks.
-            </p>
-          </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 relative z-10">
-            {MOODS.map((m) => (
-              <Link
-                key={m.id}
-                href={`/restaurants?cuisine=${m.id}`}
-                className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/15 rounded-2xl py-3.5 px-3 transition-all duration-200 hover:-translate-y-1 text-center"
-              >
-                <span className="text-sm font-bold text-white block">{m.name}</span>
-              </Link>
-            ))}
+            <MoodStagger>
+              {MOODS.map((m) => (
+                <MoodItem key={m.id}>
+                  <Link
+                    href={`/restaurants?cuisine=${m.id}`}
+                    className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/15 rounded-2xl py-3.5 px-3 transition-all duration-200 hover:-translate-y-1 text-center block"
+                  >
+                    <span className="text-sm font-bold text-white block">{m.name}</span>
+                  </Link>
+                </MoodItem>
+              ))}
+            </MoodStagger>
           </div>
-        </div>
+        </SectionReveal>
       </div>
 
       {/* Restaurant Carousel 2: Fastest Delivery */}
       <div className="max-w-6xl mx-auto px-4 md:px-8">
-        <RestaurantCarousel
-          title="Fastest Delivery"
-          subtitle="Hot meals delivered in under 30 mins"
-          items={byTime}
-        />
+        <SectionReveal>
+          <RestaurantCarousel
+            title="Fastest Delivery"
+            subtitle="Hot meals delivered in under 30 mins"
+            items={byTime}
+          />
+        </SectionReveal>
       </div>
+
+      {/* Dynamic Food Fun Fact (Updates on Scroll In/Out or Refresh) */}
+      <FoodFunFact />
     </main>
   );
 }

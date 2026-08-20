@@ -4,16 +4,25 @@ import { Restaurant } from "@/lib/types";
 import RestaurantMark from "./RestaurantMark";
 import FavoriteButton from "./FavoriteButton";
 
-export default function RestaurantCard({ r }: { r: Restaurant }) {
+export default function RestaurantCard({
+  r,
+  className = "",
+}: {
+  r: Restaurant;
+  className?: string;
+}) {
   // Clean locality to remove repetitive city suffixes
   const cleanLocality = r.locality
-    ? r.locality.replace(/,\s*Krishnagiri/i, "").replace(/Krishnagiri\s*Locality/i, "Central Town").replace(/Krishnagiri\s*Town/i, "Town Center")
+    ? r.locality
+        .replace(/,\s*Krishnagiri/i, "")
+        .replace(/Krishnagiri\s*Locality/i, "Central Town")
+        .replace(/Krishnagiri\s*Town/i, "Town Center")
     : "Nearby";
 
   return (
     <Link
       href={`/restaurants/${r.id}`}
-      className="group text-left w-72 sm:w-80 flex-shrink-0 rounded-[2rem] overflow-hidden bg-surface dark:bg-[#24201D] border border-gray-100/80 dark:border-[#332E28] hover:border-primary/30 transition-all duration-300 relative flex flex-col shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_16px_36px_rgb(0,0,0,0.12)] hover:-translate-y-1"
+      className={`group text-left w-full min-w-0 rounded-[2rem] overflow-hidden bg-surface dark:bg-[#24201D] border border-gray-100/80 dark:border-[#332E28] hover:border-primary/30 transition-all duration-300 relative flex flex-col shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_16px_36px_rgb(0,0,0,0.12)] hover:-translate-y-1 ${className}`}
     >
       {/* Top Image Section */}
       <div className="relative h-48 w-full overflow-hidden bg-gray-100 dark:bg-[#1A202C]">

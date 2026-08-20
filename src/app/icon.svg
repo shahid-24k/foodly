@@ -1,25 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
   <defs>
-    <linearGradient id="royalGreenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="royalGreenAppGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#0B6E4F" />
       <stop offset="60%" stop-color="#074D37" />
       <stop offset="100%" stop-color="#10B981" />
     </linearGradient>
-    <linearGradient id="goldFlavorGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+    <linearGradient id="goldSteamGrad" x1="0%" y1="100%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#F59E0B" />
       <stop offset="100%" stop-color="#FDE68A" />
     </linearGradient>
   </defs>
 
   <!-- Squircle Base in Royal Green -->
-  <rect width="64" height="64" rx="20" fill="url(#royalGreenGrad)" />
+  <rect width="64" height="64" rx="20" fill="url(#royalGreenAppGrad)" />
   
-  <!-- Milk White subtle inner stroke -->
+  <!-- Milk White border -->
   <rect x="2" y="2" width="60" height="60" rx="18" stroke="#F7F5F0" stroke-opacity="0.25" stroke-width="1.5" />
 
-  <!-- Gold steam swirls -->
-  <path d="M26 15 C25 11, 29 11, 28 14 C27 16, 26 18, 26 18" stroke="url(#goldFlavorGrad)" stroke-width="2.5" stroke-linecap="round" fill="none" />
-  <path d="M38 16 C39 12.5, 35 12.5, 36 15 C37 17, 38 18, 38 18" stroke="url(#goldFlavorGrad)" stroke-width="2" stroke-linecap="round" fill="none" />
+  <!-- Gold steam -->
+  <path d="M26 15 C25 11, 29 11, 28 14 C27 16, 26 18, 26 18" stroke="url(#goldSteamGrad)" stroke-width="2.5" stroke-linecap="round" fill="none" />
+  <path d="M38 16 C39 12.5, 35 12.5, 36 15 C37 17, 38 18, 38 18" stroke="url(#goldSteamGrad)" stroke-width="2" stroke-linecap="round" fill="none" />
   
   <!-- Milk White Cloche Handle -->
   <circle cx="32" cy="22" r="3.2" fill="#F7F5F0" />

@@ -1,91 +1,52 @@
-# FOODLY — Krishnagiri Food Delivery Web App
+# FOODLY — Food Delivery Web App (Krishnagiri)
 
-> **Picking this up in an AI IDE (Antigravity, Cursor, Claude Code, etc.)?**  
-> Read [`AGENTS.md`](./AGENTS.md) first — it has the full architecture map, active design system, and open/closed tasks.
-
-A full-stack food delivery platform for real local restaurants in **Krishnagiri, Tamil Nadu**, built as a college project under the Naan Mudhalvan initiative.
+A full-stack food delivery web app built for real restaurants in Krishnagiri, Tamil Nadu as part of our college project.
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | Next.js 14 (App Router) |
-| Language | TypeScript |
-| Styling | Tailwind CSS |
-| Backend / Auth / DB | Supabase (Postgres + Auth + Row Level Security) |
-| Icons | lucide-react |
-| State | React Context + `localStorage` (cart only; orders persist to DB) |
+- **Frontend**: Next.js 14 (App Router), TypeScript, Tailwind CSS, lucide-react
+- **Backend / Database**: Supabase (PostgreSQL, Supabase Auth, Row Level Security)
+- **State Management**: React Context + `localStorage` for Cart
 
 ---
 
 ## Features
 
-- **8 real Krishnagiri restaurants** — ratings and delivery times cross-checked against live Swiggy listings
-- Home page with category explorer, mood filters, and featured restaurant sections
-- Restaurant listing page with **search, cuisine filter, veg-only toggle, sort by rating/time**
-- Restaurant detail page with a full categorized menu and add-to-cart
-- Cart page with item quantity controls and order summary
-- Simplified **2-step checkout** — address + payment on step 1, review + confirm on step 2
-- **Live order tracking** — 6-step status timeline (auto-advances for demo; restaurant can also manually advance)
-- Order history with **search by restaurant name or order ID**, plus reorder
-- **Favorites** — heart-toggle on every restaurant card, dedicated `/favorites` page
-- **Real Supabase Auth** — email/password sign-up and login with three roles: `customer`, `restaurant`, `admin`
-- Role-protected routes enforced at both **middleware** and **RLS policy** level
-- **Restaurant dashboard** — incoming orders, status management, full menu CRUD (add / edit / delete items)
-- **Admin dashboard** — platform-wide stats and restaurant overview
-- **Privilege-escalation protection** — a Postgres trigger (`prevent_privilege_escalation`) blocks self-promotion via client API; only a direct SQL/admin session can change `role` or `restaurant_id`
+- **Live Restaurant & Food Search**: Instant search by restaurant name (partial/prefix), cuisines, tags, locality, and menu items/dishes (e.g. biryani, pizza, dosa, momos).
+- **Responsive Layout & Grid**: Mobile-to-desktop fluid responsive grid (1 to 4 columns) with non-overlapping cards.
+- **Compact Cart & Delivery Progress**: Compact thumbnail item rows, free delivery progress tracker, and transparent pricing breakdown.
+- **2-Step Checkout**: Delivery address with type selection (Home, Work, Other) and selectable payment options (UPI, Card, Net Banking, COD).
+- **Live Order Tracking**: 6-step visual status timeline with interactive progression.
+- **Order History & Search**: Instant lookup by restaurant name or Order ID.
+- **Favorites**: Heart toggle to bookmark preferred spots.
+- **Role-Based Dashboards**:
+  - **Customer**: Browse, cart, checkout, tracking, favorites, profile.
+  - **Restaurant Owner**: Order management and full Menu CRUD (add/edit/delete menu items).
+  - **Admin**: System-wide statistics.
+- **Security**: Double-gated route protection (Next.js middleware + Postgres Row Level Security) with trigger-enforced privilege escalation protection.
 
 ---
 
-## Requirements
+## Getting Started
 
-- **Node.js** ≥ 18.17 (LTS recommended)
-- **npm** ≥ 9 (comes with Node)
-- Internet connection (app hits the live Supabase project by default — no local DB needed)
+### Prerequisites
 
-Check your versions:
+- Node.js 18.x or higher
+- npm 9.x or higher
 
-```bash
-node -v   # should print v18.x or higher
-npm -v    # should print 9.x or higher
-```
-
----
-
-## Quick Start
+### Installation
 
 ```bash
-# 1. Clone the repository
 git clone https://github.com/shahid-24k/foodly.git
 cd foodly
-
-# 2. Install dependencies
 npm install
-
-# 3. Set up environment variables
-#    The .env.example already points at the live Supabase project (publishable anon key — safe to commit)
 cp .env.example .env.local
-
-# 4. Start the development server
 npm run dev
 ```
 
-Open **http://localhost:3000** — the app will be live with hot-reload.
-
----
-
-## Scripts
-
-```bash
-npm run dev      # Development server with hot-reload at localhost:3000
-npm run build    # Production build — run this before every push to catch TypeScript errors
-npm run start    # Serve the production build locally (requires npm run build first)
-npm run lint     # ESLint
-```
-
-> **Always run `npm run build` before committing a significant change.** This project has historically caught real TypeScript errors at build time that a visual review missed.
+Visit [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
@@ -93,63 +54,37 @@ npm run lint     # ESLint
 
 | Variable | Description |
 |---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Your Supabase anon (publishable) key |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon (publishable) key |
 
-Both values are already filled in `.env.example` and point to the shared project. Copy it as `.env.local` — no changes needed to run locally.
-
-If you want your **own** Supabase project: run `supabase/schema.sql` in a fresh SQL editor, then update `.env.local` with the new URL and key.
+Configured in `.env.local`. Reference copy in `.env.example`.
 
 ---
 
-## Deploy to Vercel (Recommended)
+---
 
-```bash
-# One-time setup
-npm install -g vercel
-vercel login
+## Test Account
+For testing the complete end-to-end flow (Browse → Cart → Checkout → Order Tracking → Orders History):
 
-# First deploy (detects Next.js automatically)
-vercel
+- **Role**: Customer (Test User)
+- **Email**: `test@foodly.local`
+- **Password**: `TestPass123!`
 
-# Set environment variables if not prompted automatically
-vercel env add NEXT_PUBLIC_SUPABASE_URL
-vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-# Production deploy
-vercel --prod
-```
-
-After deploying: add your live URL to **Supabase → Authentication → URL Configuration → Redirect URLs**, otherwise email confirmation links will point back to `localhost`.
-
-Any Node-capable host works too (`Railway`, `Render`, bare VPS) — just `npm run build && npm run start` with the two env vars set.
+*(You can also register any new customer account directly via `/signup` with instant login enabled if auto-confirm is active in your Supabase project).*
 
 ---
 
-## Setting Up Roles (for Demo / Viva)
+## Setting Up Roles
 
-- **Customer** — sign up from `/signup`, select "Customer". No extra step.
-- **Restaurant owner** — sign up selecting "Restaurant owner", then link to a restaurant via Supabase SQL Editor:
-  ```sql
-  UPDATE profiles SET restaurant_id = 'r1' WHERE email = 'owner@example.com';
-  ```
-- **Admin** — no public signup path by design. Promote an existing account:
-  ```sql
-  UPDATE profiles SET role = 'admin' WHERE email = 'you@example.com';
-  ```
-
----
-
-## Adding / Replacing Restaurant Photos
-
-The app falls back to a brand-mark badge when no photo exists. To add real photos:
-
-1. Place image files under `public/restaurants/` (e.g. `r1.jpg`)
-2. Update `hero_image` for each restaurant in Supabase:
+1. **Customer**: Sign up via `/signup` with role "Customer".
+2. **Restaurant Owner**: Sign up with role "Restaurant Owner", then link to a restaurant in Supabase SQL editor:
    ```sql
-   UPDATE restaurants SET hero_image = '/restaurants/r1.jpg' WHERE id = 'r1';
+   UPDATE profiles SET restaurant_id = 'r1' WHERE email = 'owner@example.com';
    ```
-3. Same pattern for dish photos via `menu_items.image_url`
+3. **Admin**: Promote an account via Supabase SQL editor:
+   ```sql
+   UPDATE profiles SET role = 'admin' WHERE email = 'admin@example.com';
+   ```
 
 ---
 
@@ -157,70 +92,42 @@ The app falls back to a brand-mark badge when no photo exists. To add real photo
 
 ```
 src/
-  app/                   Next.js App Router pages
-    page.tsx             Home (Server Component)
-    restaurants/         Listing (Client, needs filter interactivity)
-    restaurants/[id]/    Detail + menu + add-to-cart (Client)
-    cart/                Cart page (Client)
-    checkout/            2-step checkout (Client)
-    orders/              Order history with search (Client)
-    orders/[id]/         Live order tracking with status timeline (Client)
-    login/ signup/       Supabase Auth pages
-    account/             Profile + role-aware links
-    restaurant/dashboard/ Restaurant owner dashboard (CRUD menu + order management)
-    admin/dashboard/     Admin dashboard
+  app/                     App Router pages
+    page.tsx               Home page & featured carousel
+    restaurants/           Listing with live search & cuisine filters
+    restaurants/[id]/      Menu & item cart actions
+    cart/                  Compact cart & delivery progress
+    checkout/              2-step address & payment checkout
+    orders/                Order history & search
+    orders/[id]/           Live order tracking
+    favorites/             Saved restaurants
+    login/ signup/         Supabase authentication
+    account/               Profile details
+    restaurant/dashboard/  Restaurant owner view (orders + menu CRUD)
+    admin/dashboard/       Admin view
   components/
-    Header.tsx           Sticky top nav with cart badge, dark mode toggle
-    BottomNav.tsx        Floating pill bottom nav (mobile)
-    RestaurantCard.tsx   Card shown in listing + home sections
-    RestaurantMark.tsx   Brand mark / hero image with Google photo attribution
-    FoodImage.tsx        Menu item image with graceful fallback
-    FavoriteButton.tsx   Heart toggle, syncs to Supabase favorites table
+    Header.tsx             Top navigation with cart badge & dark mode
+    BottomNav.tsx          Mobile navigation bar
+    RestaurantCard.tsx     Responsive restaurant card
+    RestaurantCarousel.tsx Smooth horizontal scrolling carousel
+    RestaurantMark.tsx     Hero image / fallback mark
+    FoodImage.tsx          Menu item thumbnail with fallback
+    FavoriteButton.tsx     Heart toggle connected to Supabase
+    LoadingScreen.tsx      Splash screen with smooth fade transition
   lib/
-    supabase/client.ts   Browser Supabase client (use in 'use client' components)
-    supabase/server.ts   Server Supabase client (use in Server Components only)
-    cart-context.tsx     Cart state: React Context + localStorage
-    types.ts             Shared TypeScript types + STATUS_STEPS + money() formatter
-    data.ts              Local fallback dataset (used when Supabase is unreachable)
-  middleware.ts          Role-based route protection (runs on Edge)
+    supabase/client.ts     Browser Supabase client
+    supabase/server.ts     Server Supabase client
+    cart-context.tsx       Cart state & calculation provider
+    types.ts               TypeScript models & helpers
+    data.ts                Fallback restaurant & menu dataset
+  middleware.ts            Role-based route protection
 supabase/
-  schema.sql             Full Postgres schema — reference copy of what's live
+  schema.sql               PostgreSQL schema & RLS policies
 ```
 
 ---
 
-## Known Limitations (be upfront in a viva)
+## Known Limitations
 
-- **Payment is mocked** — 3 options (UPI / Card / COD) with no real gateway. Razorpay is the planned integration.
-- **Order status auto-advances** on a client-side timer (~4.5 s/step) to simulate a kitchen workflow for demo purposes. A production build would drive this only through restaurant-side actions and/or Supabase Realtime.
-- **Restaurant photos** are a mix of real Google Places images (with attribution) and generated brand marks — see "Adding Restaurant Photos" above.
-- **No push/SMS notifications** — order status is poll-based.
-
----
-
-## Generate a Full Project Document with Diagrams
-
-Paste the prompt below into any capable LLM (Gemini, Claude, GPT-4) after sharing the codebase context or this README:
-
-```
-You are a senior software architect. Using the codebase and README provided, 
-generate a comprehensive Software Requirements Specification (SRS) document for 
-the FOODLY project that includes:
-
-1. **Executive Summary** — project purpose, scope, target users, and college initiative context.
-2. **Functional Requirements** — numbered list for each user role (Customer, Restaurant Owner, Admin).
-3. **Non-functional Requirements** — performance, security (RLS + trigger), scalability, and accessibility.
-4. **System Architecture Diagram** — a Mermaid flowchart showing: Browser → Next.js Middleware → App Router → Supabase (Auth, Postgres, RLS). Include the three user roles and their access paths.
-5. **Database Schema Diagram** — a Mermaid ER diagram with all tables (profiles, restaurants, menu_items, orders, favorites) and their relationships and key columns.
-6. **User Flow Diagrams** — Mermaid sequence diagrams for:
-   a. Customer: Browse → Add to Cart → Checkout → Track Order
-   b. Restaurant Owner: Login → Dashboard → Advance Order Status
-   c. Admin: Login → View Platform Stats
-7. **Component Tree** — a Mermaid graph showing the Next.js component hierarchy from layout.tsx down to leaf components.
-8. **API / Data Flow** — describe how data moves between client components, server components, and Supabase using the existing client.ts / server.ts pattern.
-9. **Security Model** — explain the three-layer security (Middleware route guard → React conditional rendering → Postgres RLS + privilege-escalation trigger).
-10. **Deployment Architecture** — describe the Vercel + Supabase hosting model with environment variable management.
-11. **Known Limitations & Future Roadmap** — Razorpay integration, Supabase Realtime for orders, claim-request workflow for restaurant owners.
-
-Format the output as a single Markdown document. Use Mermaid code blocks for all diagrams so they render directly on GitHub.
-```
+- Payment is currently mocked (selectable options without charging real payment methods). Razorpay integration is planned for future production deployment.
+- Push/SMS notifications are pull/poll based.

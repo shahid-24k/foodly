@@ -35,7 +35,7 @@ export default function FavoritesPage() {
           <p className="font-bold text-charcoal">Tap the heart on a restaurant to save it here.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {restaurants.map((r) => <RestaurantCard key={r.id} r={r} />)}
         </div>
       )}

@@ -1,22 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&family=Inter:wght@400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
 body {
-  background: #F8F9FB;
-  color: #2D3748;
+  background: #F7F5F0;
+  color: #1A2820;
   font-family: 'Inter', sans-serif;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 html.dark body {
-  background: #1A202C;
+  background: #0A130E;
   color: #F7FAFC;
 }
 
-.font-display { font-family: 'Inter', sans-serif; }
-.eyebrow { font-family: 'Inter', sans-serif; letter-spacing: 0.05em; text-transform: uppercase; }
-.scrollbar-hide::-webkit-scrollbar { display: none; }
-.scrollbar-hide { scrollbar-width: none; }
+.font-display {
+  font-family: 'Inter', sans-serif;
+}
+
+.font-foodly,
+.font-handwriting {
+  font-family: 'Indie Flower', cursive, sans-serif;
+}
+
+
+.eyebrow {
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  scrollbar-width: none;
+}
+
+/* Parallax Scrolling Component Styles */
+.parallax {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.parallax__header {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background: #0b0b0f;
+}
+
+.parallax__visuals {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.parallax__black-line-overflow {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #0b0b0f;
+  z-index: 10;
+}
+
+.parallax__layers {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.parallax__layer-img {
+  position: absolute;
+  width: 100%;
+  height: 120%;
+  top: -10%;
+  left: 0;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+}
+
+.parallax__layer-title {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.parallax__title {
+  font-size: clamp(3rem, 12vw, 9rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  text-align: center;
+  line-height: 1;
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.parallax__fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 160px;
+  background: linear-gradient(to bottom, transparent, #FAF9F6);
+  pointer-events: none;
+  z-index: 6;
+}
+
+.parallax__content {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1.5rem;
+  background: #FAF9F6;
+}
+
+.osmo-icon-svg {
+  width: 120px;
+  height: 120px;
+  color: #6A38C2;
+}
+
+.osmo-credits {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-size: 0.875rem;
+  color: #718096;
+  background: #FAF9F6;
+}
+
+.osmo-credits__p-a {
+  color: #6A38C2;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}

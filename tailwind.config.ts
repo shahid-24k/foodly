@@ -6,18 +6,21 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: "#6A38C2",
-        "primary-dark": "#4B2494",
-        secondary: "#42D2B8",
-        accent: "#FF5E7E",
+        primary: "#0B6E4F",
+        "primary-dark": "#074D37",
+        "primary-light": "#10B981",
+        secondary: "#10B981",
+        accent: "#E11D48",
         surface: "#FFFFFF",
-        background: "#F8F9FB",
-        "text-main": "#2D3748",
-        "text-muted": "#718096",
+        background: "#F7F5F0",
+        "text-main": "#1A2820",
+        "text-muted": "#5C6F64",
       },
       fontFamily: {
         display: ["'Inter'", "sans-serif"],
         body: ["'Inter'", "sans-serif"],
+        foodly: ["'Indie Flower'", "cursive", "sans-serif"],
+        handwriting: ["'Indie Flower'", "cursive", "sans-serif"],
       },
     },
   },

@@ -149,7 +149,7 @@ export default function RestaurantCarousel({
         }}
       >
         {items.map((r) => (
-          <div key={r.id} style={{ scrollSnapAlign: "start" }} className="flex-shrink-0">
+          <div key={r.id} style={{ scrollSnapAlign: "start" }} className="w-72 sm:w-80 flex-shrink-0">
             <RestaurantCard r={r} />
           </div>
         ))}
