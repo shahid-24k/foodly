@@ -30,6 +30,8 @@ export default function RestaurantMark({
     );
   }
 
+  const isGooglePhoto = imgSrc.includes("googleusercontent") || (r.source_name && r.source_name.toLowerCase().includes("google"));
+
   return (
     <div className={`relative w-full h-full overflow-hidden bg-gray-100 dark:bg-[#1A202C] ${className}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -41,6 +43,11 @@ export default function RestaurantMark({
         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent opacity-60 pointer-events-none" />
+      {isGooglePhoto && (
+        <span className="absolute bottom-2 right-2 text-[9px] font-semibold text-white/75 bg-black/40 backdrop-blur-xs px-1.5 py-0.5 rounded pointer-events-none">
+          Photo: Google
+        </span>
+      )}
     </div>
   );
 }

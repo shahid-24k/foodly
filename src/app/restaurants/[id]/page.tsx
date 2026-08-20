@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Star, Clock, Plus, Minus, Search, Leaf } from "lucide-react";
+import { ArrowLeft, Star, Clock, Plus, Minus, Search, Leaf, ShoppingBag, ArrowRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useCart } from "@/lib/cart-context";
 import RestaurantMark from "@/components/RestaurantMark";
@@ -44,6 +44,14 @@ export default function RestaurantDetailPage() {
     return list;
   }, [menu, dishQuery, vegOnly, activeCategory]);
 
+  const totalCartCount = useMemo(() => {
+    return Object.values(cart.items).reduce((sum, item) => sum + item.qty, 0);
+  }, [cart.items]);
+
+  const totalCartAmount = useMemo(() => {
+    return Object.values(cart.items).reduce((sum, item) => sum + item.price * item.qty, 0);
+  }, [cart.items]);
+
   if (!restaurant) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-20 text-center text-[#9A9488] dark:text-[#8C8477]">
@@ -73,7 +81,7 @@ export default function RestaurantDetailPage() {
   };
 
   return (
-    <main className="pb-28 overflow-x-hidden">
+    <main className="pb-48 md:pb-52 overflow-x-hidden">
       {/* Hero Banner Header */}
       <div className="h-64 md:h-80 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
@@ -250,6 +258,7 @@ export default function RestaurantDetailPage() {
                                 <button
                                   onClick={() => changeQty(item.id, -1)}
                                   className="hover:scale-110 transition-transform"
+                                  aria-label="Decrease quantity"
                                 >
                                   <Minus size={16} />
                                 </button>
@@ -259,6 +268,7 @@ export default function RestaurantDetailPage() {
                                 <button
                                   onClick={() => changeQty(item.id, 1)}
                                   className="hover:scale-110 transition-transform"
+                                  aria-label="Increase quantity"
                                 >
                                   <Plus size={16} />
                                 </button>
@@ -282,23 +292,42 @@ export default function RestaurantDetailPage() {
         )}
       </div>
 
+      {/* Floating Checkout CTA — strictly positioned above BottomNav */}
       <AnimatePresence>
-        {Object.keys(cart.items).length > 0 && (
+        {totalCartCount > 0 && (
           <motion.div
-            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 50, scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-30"
+            exit={{ opacity: 0, y: 30, scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 350, damping: 28 }}
+            className="fixed bottom-[calc(5.75rem+env(safe-area-inset-bottom,0px))] md:bottom-[calc(5.75rem+env(safe-area-inset-bottom,0px))] left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-md z-30 pointer-events-auto"
           >
             <Link
               href="/cart"
-              className="bg-gradient-to-r from-primary to-secondary text-white font-bold px-8 py-4 rounded-full shadow-[0_8px_30px_rgb(106,56,194,0.4)] hover:scale-105 transition-transform flex items-center gap-3"
+              className="w-full bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary text-white font-bold px-5 py-3.5 sm:px-6 sm:py-4 rounded-full shadow-[0_12px_36px_rgba(106,56,194,0.4)] hover:shadow-[0_16px_40px_rgba(106,56,194,0.5)] transition-all flex items-center justify-between gap-3 backdrop-blur-md border border-white/20 active:scale-[0.99]"
             >
-              <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">
-                {Object.values(cart.items).reduce((sum, item) => sum + item.qty, 0)}
-              </span>
-              View basket &rarr;
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="relative flex items-center justify-center">
+                  <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white flex-shrink-0">
+                    <ShoppingBag size={18} />
+                  </div>
+                  <span className="absolute -top-1.5 -right-1.5 bg-accent text-white text-[10px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
+                    {totalCartCount}
+                  </span>
+                </div>
+                <div className="flex flex-col text-left min-w-0">
+                  <span className="text-[11px] uppercase tracking-wider text-white/80 font-bold leading-none">
+                    View Basket
+                  </span>
+                  <span className="text-sm font-black text-white leading-tight mt-0.5">
+                    {money(totalCartAmount)}
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center gap-1.5 font-bold text-xs sm:text-sm bg-white/20 hover:bg-white/30 px-3.5 py-1.5 rounded-full transition-colors flex-shrink-0">
+                <span>Continue</span>
+                <ArrowRight size={15} />
+              </div>
             </Link>
           </motion.div>
         )}

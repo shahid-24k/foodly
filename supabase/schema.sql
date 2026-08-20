@@ -6,13 +6,22 @@ create table restaurants (
   locality text not null, rating numeric not null, delivery_time int not null,
   price_range text not null, is_veg boolean not null default false, offer text,
   tags text[] not null default '{}', gradient_from text not null, gradient_to text not null,
-  hero_image text, created_at timestamptz default now()
+  hero_image text,
+  catalog_source text not null default 'verified_public' check (catalog_source in ('verified_public', 'restaurant_submitted', 'admin_verified')),
+  last_verified_at timestamptz default now(),
+  source_name text,
+  source_url text,
+  created_at timestamptz default now()
 );
 
 create table menu_items (
   id text primary key, restaurant_id text references restaurants(id) on delete cascade,
   name text not null, description text, price int not null, is_veg boolean not null default true,
-  category text not null, image_url text, created_at timestamptz default now()
+  category text not null, image_url text,
+  last_verified_at timestamptz default now(),
+  source_name text,
+  source_url text,
+  created_at timestamptz default now()
 );
 
 create table addresses (

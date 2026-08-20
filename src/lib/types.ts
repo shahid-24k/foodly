@@ -15,6 +15,10 @@ export interface Restaurant {
   gradient_from: string;
   gradient_to: string;
   hero_image: string | null;
+  catalog_source?: "verified_public" | "restaurant_submitted" | "admin_verified";
+  last_verified_at?: string;
+  source_name?: string | null;
+  source_url?: string | null;
 }
 
 export interface MenuItem {
@@ -26,6 +30,9 @@ export interface MenuItem {
   is_veg: boolean;
   category: string;
   image_url: string | null;
+  last_verified_at?: string;
+  source_name?: string | null;
+  source_url?: string | null;
 }
 
 export interface CartItem extends MenuItem {

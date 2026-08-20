@@ -32,23 +32,17 @@ function RestaurantsList() {
     const supabase = createClient();
     supabase.from("restaurants").select("*").then(({ data }) => {
       if (data && data.length > 0) {
-        const dbIds = new Set(data.map((r) => r.id));
-        setRestaurants([
-          ...data,
-          ...LOCAL_RESTAURANTS.filter((r) => !dbIds.has(r.id)),
-        ]);
+        setRestaurants(data);
       }
     });
     supabase.from("menu_items").select("*").then(({ data }) => {
       if (data && data.length > 0) {
-        const map: Record<string, MenuItem[]> = { ...LOCAL_MENU_ITEMS };
+        const map: Record<string, MenuItem[]> = {};
         data.forEach((item) => {
           if (!map[item.restaurant_id]) {
             map[item.restaurant_id] = [];
           }
-          if (!map[item.restaurant_id].some((m) => m.id === item.id)) {
-            map[item.restaurant_id].push(item);
-          }
+          map[item.restaurant_id].push(item);
         });
         setMenuItemsMap(map);
       }

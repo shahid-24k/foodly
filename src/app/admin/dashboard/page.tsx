@@ -166,15 +166,28 @@ export default function AdminDashboard() {
         )}
       </div>
 
-      <p className="font-bold text-sm text-charcoal mb-3">Restaurants</p>
+      <p className="font-bold text-sm text-charcoal mb-3">Restaurants &amp; Provenance</p>
       <div className="bg-white rounded-2xl border border-line divide-y divide-line">
         {restaurants.map((r) => (
-          <div key={r.id} className="flex items-center justify-between px-4 py-3">
-            <div className="flex items-center gap-2">
-              <ShieldCheck size={14} className="text-leaf" />
-              <span className="text-sm font-semibold text-charcoal">{r.name}</span>
+          <div key={r.id} className="flex flex-col sm:flex-row sm:items-center justify-between px-4 py-3 gap-2">
+            <div className="flex items-center gap-2.5">
+              <ShieldCheck size={16} className="text-leaf flex-shrink-0" />
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-semibold text-charcoal">{r.name}</span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-leaf/10 text-leaf">
+                    {r.catalog_source === "admin_verified" ? "Admin Verified" : r.catalog_source === "restaurant_submitted" ? "Restaurant Submitted" : "Verified Public"}
+                  </span>
+                </div>
+                <p className="text-xs text-[#9A9488]">
+                  {r.cuisine} &middot; {r.locality}
+                  {r.source_name ? ` · Source: ${r.source_name}` : ""}
+                </p>
+              </div>
             </div>
-            <span className="text-xs text-[#9A9488]">{r.cuisine} &middot; {r.rating}★</span>
+            <span className="text-xs font-bold text-charcoal self-end sm:self-center">
+              {r.rating ? `${r.rating}★` : "Rating N/A"} &middot; {r.delivery_time}m
+            </span>
           </div>
         ))}
       </div>

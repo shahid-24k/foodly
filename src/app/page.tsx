@@ -41,11 +41,7 @@ export default async function HomePage() {
   try {
     const { data } = await supabase.from("restaurants").select("*");
     if (data && data.length > 0) {
-      const dbIds = new Set(data.map((r) => r.id));
-      restaurants = [
-        ...data,
-        ...LOCAL_RESTAURANTS.filter((r) => !dbIds.has(r.id)),
-      ];
+      restaurants = data;
     } else {
       restaurants = LOCAL_RESTAURANTS;
     }
